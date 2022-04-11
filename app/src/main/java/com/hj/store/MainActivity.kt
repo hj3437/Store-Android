@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.StoreAdapter
-import com.hj.store.viewmodel.StoreDetailViewModel
 import com.hj.store.viewmodel.StoreViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -20,19 +19,13 @@ class MainActivity : AppCompatActivity() {
 
         storeList = findViewById(R.id.store_list)
 
-        val storeDetailViewModel = ViewModelProvider(this)[StoreDetailViewModel::class.java]
-
         storeAdapter = StoreAdapter(OnStoreClickListener { store ->
-            storeDetailViewModel.setStore(store)
-        })
-
-        storeDetailViewModel.store.observe(this) { store ->
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, StoreDetailFragment.newInstance(store))
                 .addToBackStack("fragment transaction")
                 .commit()
-        }
+        })
 
         val gridLayoutManager = GridLayoutManager(this, 2)
         storeList.apply {
