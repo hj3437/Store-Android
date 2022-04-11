@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, StoreDetailFragment.newInstance(store))
-                .addToBackStack("fragment transaction")
+                .addToBackStack(null)
                 .commit()
         })
 

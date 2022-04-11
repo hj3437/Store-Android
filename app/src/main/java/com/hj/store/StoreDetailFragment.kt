@@ -1,5 +1,6 @@
 package com.hj.store
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hj.store.adapter.OnStoreDetailClickListener
@@ -36,6 +38,18 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         return rootView
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // 프레그먼트 뒷부분 뷰 클릭방지
+        activity?.findViewById<RecyclerView>(R.id.store_list)?.visibility = View.INVISIBLE
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        // 프레그먼트 뒷부분 뷰 클릭방지 해재
+        activity?.findViewById<RecyclerView>(R.id.store_list)?.visibility = View.VISIBLE
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val storeDetailViewModel = ViewModelProvider(this)[StoreDetailViewModel::class.java]
@@ -43,17 +57,21 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         storeDetailViewModel.setStore(store)
 
         val storeImageView = rootView.findViewById<ImageView>(R.id.store_detail_imageView)
+        storeImageView.isEnabled = false
+
         val storeTitleTextView = rootView.findViewById<TextView>(R.id.store_detail_title_textView)
+        storeTitleTextView.isClickable = false
 
         detailList = rootView.findViewById(R.id.store_detail_list)
 
         storeDetailAdapter = StoreDetailAdapter(OnStoreDetailClickListener {
-
+            Log.d("TAG", "$it")
         })
 
         val gridLayoutManager = GridLayoutManager(rootView.context, 1)
+        val linearLayoutManager = LinearLayoutManager(rootView.context)
         detailList.apply {
-            layoutManager = gridLayoutManager
+            layoutManager = linearLayoutManager
             adapter = storeDetailAdapter
             hasFixedSize()
         }
@@ -71,7 +89,6 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         }
 
         storeDetailViewModel.storeDetail.observe(viewLifecycleOwner) { storeDetail ->
-            Log.d("TAG", "$storeDetail")
             storeDetailAdapter.submitList(storeDetail.items)
         }
     }
