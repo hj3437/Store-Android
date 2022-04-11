@@ -4,13 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.StoreAdapter
 
 class MainActivity : AppCompatActivity() {
-    val TAG = "메인"
-
     private lateinit var storeList: RecyclerView
     private lateinit var storeAdapter: StoreAdapter
 
@@ -21,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         storeList = findViewById(R.id.store_list)
 
         storeAdapter = StoreAdapter()
-        val linearLayoutManager = LinearLayoutManager(this)
         val gridLayoutManager = GridLayoutManager(this, 2)
         storeList.apply {
             layoutManager = gridLayoutManager
