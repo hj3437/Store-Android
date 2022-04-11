@@ -13,13 +13,12 @@ import com.bumptech.glide.Glide
 import com.hj.store.R
 import com.hj.store.data.Store
 
-class StoreAdapter : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
+class StoreAdapter(private val clickListener: OnStoreClickListener) : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
     class StoreViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
-        fun bind(item: Store) {
+        fun bind(store: Store, clickListener: OnStoreClickListener) {
             val storeImageView = rootView.findViewById<ImageView>(R.id.store_list_imageView)
-
             Glide.with(rootView.context)
-                .load(item.imageUrl)
+                .load(store.imageUrl)
                 .centerCrop()
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_placeholder)
@@ -27,10 +26,14 @@ class StoreAdapter : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffU
                 .into(storeImageView)
 
             val titleTextView = rootView.findViewById<TextView>(R.id.store_list_title_textVIew)
-            titleTextView.text = item.name
+            titleTextView.text = store.name
 
             val addressTextView = rootView.findViewById<TextView>(R.id.store_list_address_textView)
-            addressTextView.text = item.address
+            addressTextView.text = store.address
+
+            rootView.setOnClickListener {
+                clickListener.onClick(store)
+            }
         }
     }
 
@@ -42,7 +45,7 @@ class StoreAdapter : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffU
 
     override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 }
 
@@ -50,4 +53,8 @@ object StoreDiffUtil : DiffUtil.ItemCallback<Store>() {
     override fun areItemsTheSame(oldItem: Store, newItem: Store) = oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: Store, newItem: Store) = oldItem == newItem
+}
+
+class OnStoreClickListener(val clickListener: (store: Store) -> Unit) {
+    fun onClick(store: Store) = clickListener(store)
 }
