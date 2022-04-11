@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.StoreAdapter
+import com.hj.store.viewmodel.StoreViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var storeList: RecyclerView
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         storeList = findViewById(R.id.store_list)
 
         storeAdapter = StoreAdapter(OnStoreClickListener {
-            // TODO
+
         })
 
         val gridLayoutManager = GridLayoutManager(this, 2)

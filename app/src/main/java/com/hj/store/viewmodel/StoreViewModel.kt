@@ -1,4 +1,4 @@
-package com.hj.store
+package com.hj.store.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
