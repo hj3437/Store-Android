@@ -1,6 +1,6 @@
 package com.hj.store.data
 
-data class Item(
+data class StoreDetailItem(
     val id: Int = -1,
     var name: String = "",
     var price: Int = 0,

@@ -6,5 +6,5 @@ data class StoreDetail(
     var storeAddress: String = "",
     var storeImageUrl: String = "",
     var itemSize: String = "",
-    var items: List<Item> = emptyList()
+    var items: List<StoreDetailItem> = emptyList()
 )

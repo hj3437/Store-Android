@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.hj.store.R
 import com.hj.store.data.Store
 
+
 class StoreAdapter(private val clickListener: OnStoreClickListener) : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
     class StoreViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
         fun bind(store: Store, clickListener: OnStoreClickListener) {
