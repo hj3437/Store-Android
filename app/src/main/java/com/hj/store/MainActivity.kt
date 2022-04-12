@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById<Toolbar>(R.id.store_toolbar)
+        toolbar = findViewById(R.id.store_toolbar)
         setSupportActionBar(toolbar)
 
         // up 버튼
@@ -166,16 +166,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getLoginStatus(): Int {
+    private fun getLoginStatus(): Int {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
         return sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
     }
 
-    fun setLogout() {
+    private fun setLogout() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            putInt(getString(com.hj.store.R.string.saved_user_login_key), -1)
+            putInt(getString(R.string.saved_user_login_key), -1)
             apply()
         }
     }
