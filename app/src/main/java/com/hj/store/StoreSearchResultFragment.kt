@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +21,6 @@ class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
     private lateinit var closeButton: TextView
 
     private lateinit var searchViewModel: SearchViewModel
-
 
     companion object {
         fun newInstance(stores: List<Store>) = StoreSearchResultFragment(stores)
@@ -64,7 +62,6 @@ class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
 
         closeButton = rootView.findViewById(R.id.search_result_close_button)
         closeButton.setOnClickListener {
-            Toast.makeText(requireContext(), "CLOSE", Toast.LENGTH_SHORT).show()
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
     }
