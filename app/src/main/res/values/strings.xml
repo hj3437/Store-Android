@@ -20,4 +20,8 @@
     <string name="ask_user_store_edit">편집하시겠습니까?</string>
     <string name="store_search">스토어 검색</string>
     <string name="refresh">새로고침</string>
+    <string name="save">저장</string>
+    <string name="store_image_url">이미지 URL</string>
+    <string name="store_address">주소</string>
+    <string name="store_name">스토어 이름</string>
 </resources>

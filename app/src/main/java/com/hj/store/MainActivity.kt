@@ -67,7 +67,12 @@ class MainActivity : AppCompatActivity() {
                     AlertDialog.Builder(this)
                         .setMessage(getString(R.string.ask_user_store_edit))
                         .setPositiveButton(getString(R.string.menu_edit)) { _, _ ->
-
+                            // TODO
+                            supportFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.container, StoreEditFragment.newInstance(store))
+                                .addToBackStack(null)
+                                .commit()
                         }
                         .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                         }.create()
