@@ -10,11 +10,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hj.store.MainActivity.Companion.CLICK_MENU_DELETE
+import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
+import com.hj.store.MainActivity.Companion.CLICK_STORE
 import com.hj.store.R
 import com.hj.store.data.Store
 
 
-class StoreAdapter(private val clickListener: OnStoreClickListener) : ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
+class StoreAdapter(private val clickListener: OnStoreClickListener) :
+    ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
     class StoreViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
         fun bind(store: Store, clickListener: OnStoreClickListener) {
             val storeImageView = rootView.findViewById<ImageView>(R.id.store_list_imageView)
@@ -33,8 +37,22 @@ class StoreAdapter(private val clickListener: OnStoreClickListener) : ListAdapte
             val addressTextView = rootView.findViewById<TextView>(R.id.store_list_address_textView)
             addressTextView.text = store.address
 
-            rootView.setOnClickListener {
-                clickListener.onClick(store)
+            val editTextView = rootView.findViewById<TextView>(R.id.store_list_edit_textView)
+            editTextView.visibility = View.VISIBLE
+
+            editTextView.setOnClickListener {
+                clickListener.onClick(store, CLICK_MENU_EDIT)
+            }
+
+            val deleteTextView = rootView.findViewById<TextView>(R.id.store_list_delete_textView)
+            deleteTextView.visibility = View.VISIBLE
+
+            deleteTextView.setOnClickListener {
+                clickListener.onClick(store, CLICK_MENU_DELETE)
+            }
+
+            storeImageView.setOnClickListener {
+                clickListener.onClick(store, CLICK_STORE)
             }
         }
     }
@@ -57,6 +75,6 @@ object StoreDiffUtil : DiffUtil.ItemCallback<Store>() {
     override fun areContentsTheSame(oldItem: Store, newItem: Store) = oldItem == newItem
 }
 
-class OnStoreClickListener(val clickListener: (store: Store) -> Unit) {
-    fun onClick(store: Store) = clickListener(store)
+class OnStoreClickListener(val clickListener: (store: Store, mode: String) -> Unit) {
+    fun onClick(store: Store, mode: String) = clickListener(store, mode)
 }

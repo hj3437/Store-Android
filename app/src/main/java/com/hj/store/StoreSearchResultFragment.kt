@@ -41,7 +41,7 @@ class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
         searchResultList = rootView.findViewById(R.id.search_result_list)
-        searchResultAdapter = SearchResultAdapter(OnStoreClickListener {store->
+        searchResultAdapter = SearchResultAdapter(OnStoreClickListener { store, _ ->
             activity?.supportFragmentManager
                 ?.beginTransaction()
                 ?.replace(R.id.container, StoreDetailFragment.newInstance(store))

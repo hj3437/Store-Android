@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hj.store.MainActivity.Companion.CLICK_STORE
 import com.hj.store.R
 import com.hj.store.data.Store
 
@@ -34,7 +35,7 @@ class SearchResultAdapter(private val clickListener: OnStoreClickListener) :
             addressTextView.text = store.address
 
             rootView.setOnClickListener {
-                clickListener.onClick(store)
+                clickListener.onClick(store, CLICK_STORE)
             }
         }
     }

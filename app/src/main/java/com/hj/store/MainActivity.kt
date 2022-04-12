@@ -2,6 +2,7 @@ package com.hj.store
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val USER_LOGIN = 1
         const val USER_GUEST = -1
+        const val CLICK_MENU_EDIT = "edit"
+        const val CLICK_MENU_DELETE = "delete"
+        const val CLICK_STORE = "detail"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +54,22 @@ class MainActivity : AppCompatActivity() {
 
         storeList = findViewById(R.id.store_list)
 
-        storeAdapter = StoreAdapter(OnStoreClickListener { store ->
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, StoreDetailFragment.newInstance(store))
-                .addToBackStack(null)
-                .commit()
+        storeAdapter = StoreAdapter(OnStoreClickListener { store, mode ->
+            when (mode) {
+                CLICK_STORE -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.container, StoreDetailFragment.newInstance(store))
+                        .addToBackStack(null)
+                        .commit()
+                }
+                CLICK_MENU_EDIT -> {
+                    Log.d("클릭", "편집")
+                }
+                CLICK_MENU_DELETE -> {
+                    Log.d("클릭", "삭제: ")
+                }
+            }
         })
 
         val gridLayoutManager = GridLayoutManager(this, 2)

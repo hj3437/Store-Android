@@ -28,11 +28,40 @@
         android:id="@+id/store_list_address_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/store_list_title_textVIew"
         app:layout_constraintStart_toStartOf="@+id/store_list_title_textVIew"
         app:layout_constraintTop_toBottomOf="@+id/store_list_title_textVIew"
         tools:text="서울시 강서구" />
+
+    <TextView
+        android:id="@+id/store_list_edit_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/menu_edit"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        android:padding="4dp"
+        android:background="@drawable/menu_btn"
+        app:layout_constraintStart_toStartOf="@+id/store_list_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/store_list_address_textView"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/store_list_delete_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/menu_delete"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        android:padding="4dp"
+        android:background="@drawable/menu_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/store_list_edit_textView"
+        app:layout_constraintTop_toBottomOf="@+id/store_list_address_textView"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
