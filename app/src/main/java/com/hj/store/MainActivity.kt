@@ -2,7 +2,6 @@ package com.hj.store
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -65,14 +64,19 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
                 CLICK_MENU_EDIT -> {
-                    Log.d("클릭", "편집")
+                    AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.ask_user_store_edit))
+                        .setPositiveButton(getString(R.string.menu_edit)) { _, _ ->
+
+                        }
+                        .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                        }.create()
+                        .show()
                 }
                 CLICK_MENU_DELETE -> {
-                    Log.d("클릭", "삭제: ")
-
                     AlertDialog.Builder(this)
                         .setMessage(getString(R.string.ask_user_store_delete))
-                        .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                        .setPositiveButton(getString(R.string.menu_delete)) { _, _ ->
                             storeViewModel.deleteStore(store.id)
                         }
                         .setNegativeButton(getString(R.string.cancel)) { _, _ ->
@@ -130,17 +134,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.store_menu_item, menu)
-
         storeMenu = menu
 
         if (getLoginStatus() == USER_LOGIN) {
             menu?.findItem(R.id.app_bar_login)?.isVisible = false
             menu?.findItem(R.id.app_bar_logout)?.isVisible = true
-            // menu?.findItem(R.id.app_bar_login)?.title = "로그아웃"
         } else {
             menu?.findItem(R.id.app_bar_login)?.isVisible = true
             menu?.findItem(R.id.app_bar_logout)?.isVisible = false
-            // menu?.findItem(R.id.app_bar_login)?.title = "로그인"
         }
 
         val appBarSearch = menu?.findItem(R.id.app_bar_search)
@@ -148,7 +149,7 @@ class MainActivity : AppCompatActivity() {
         searchView.apply {
             // 서치뷰 width 설정 없을경우 '타이틀...' 보여짐
             maxWidth = Integer.MAX_VALUE
-            queryHint = "스토어 검색"
+            queryHint = context.getString(R.string.store_search)
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -162,19 +163,27 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.app_bar_login) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, StoreLoginFragment.newInstance())
-                .addToBackStack(null)
-                .commit()
-        } else if (item.itemId == R.id.app_bar_logout) {
-            setLogout()
-            invalidateOptionsMenu()
+        when (item.itemId) {
+            R.id.app_bar_login -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, StoreLoginFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            R.id.app_bar_logout -> {
+                setLogout()
+                invalidateOptionsMenu()
+            }
+            R.id.app_bar_refresh -> {
+                storeViewModel.getStores()
+                invalidateOptionsMenu()
+            }
         }
 
         return super.onOptionsItemSelected(item)
