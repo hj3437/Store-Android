@@ -1,5 +1,6 @@
 package com.hj.store
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -70,11 +71,22 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
+        val userLoginKey = sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
+        Log.d("로그인", "onCreate: $userLoginKey")
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        return super.onPrepareOptionsMenu(menu)
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
+        val userLoginKey = sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
+        Log.d("로그인", "onResume: $userLoginKey")
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.store_menu_item, menu)
@@ -104,6 +116,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.app_bar_login) {
             Log.d("TAG", "Login btn")
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, StoreLoginFragment.newInstance())
+                .addToBackStack(null)
+                .commit()
         }
         return super.onOptionsItemSelected(item)
     }

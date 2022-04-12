@@ -2,11 +2,11 @@ package com.hj.store.remote
 
 import com.hj.store.data.Store
 import com.hj.store.data.StoreDetail
+import com.hj.store.data.User
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 
 private const val BASE_URL = "https://dosorme.ga/api/"
@@ -31,8 +31,22 @@ interface StoreService {
     fun searchRestaurant(@Path("storeName") storeName: String): Call<List<Store>>
 }
 
+interface StoreLoginService {
+    @Headers("accept: application/json", "content-type: application/json")
+
+    // https://dosorme.ga/api/user/
+    @POST("user/")
+    fun loginUser(
+        @Body user: User,
+    ): Call<Boolean>
+}
+
 object StoreApi {
     val storeService: StoreService by lazy {
         retrofit.create(StoreService::class.java)
+    }
+
+    val storeLoginService: StoreLoginService by lazy {
+        retrofit.create(StoreLoginService::class.java)
     }
 }

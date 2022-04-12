@@ -5,4 +5,12 @@
     <string name="close_search">검색창 종료</string>
     <string name="search_store">검색하기</string>
     <string name="store">store</string>
+    <string name="password">비밀번호</string>
+    <string name="id">아이디</string>
+    <string name="cancel">취소</string>
+    <string name="login_fail">로그인 실패</string>
+    <string name="login_error">로그인 에러</string>
+    <string name="login_success">로그인 성공</string>
+    <string name="preference_user_key">logined_user</string>
+    <string name="saved_user_login_key">logined_user_save</string>
 </resources>
