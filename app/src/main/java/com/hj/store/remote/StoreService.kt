@@ -29,6 +29,9 @@ interface StoreService {
     // 스토어 검색
     @GET("restaurants/search/{storeName}")
     fun searchRestaurant(@Path("storeName") storeName: String): Call<List<Store>>
+
+    @DELETE("restaurants/{storeId}")
+    fun deleteRestaurant(@Path("storeId") storeId: Int): Call<Void>
 }
 
 interface StoreLoginService {

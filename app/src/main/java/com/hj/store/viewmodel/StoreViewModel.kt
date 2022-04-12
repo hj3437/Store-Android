@@ -14,6 +14,9 @@ class StoreViewModel : ViewModel() {
     private var _stores = MutableLiveData<List<Store>>()
     val store: LiveData<List<Store>> = _stores
 
+    private var _storeRemove = MutableLiveData<Boolean?>(false)
+    val storeRemove: LiveData<Boolean?> = _storeRemove
+
     init {
         getStores()
     }
@@ -33,5 +36,24 @@ class StoreViewModel : ViewModel() {
                 // TODO
             }
         })
+    }
+
+    //
+    fun deleteStore(storeId: Int) {
+        StoreApi.storeService.deleteRestaurant(storeId).enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                if (response.isSuccessful) {
+                    _storeRemove.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                // Log.d("삭제실패", "onResponse: $t")
+            }
+        })
+    }
+
+    fun resetStoreStatus() {
+        _storeRemove.value = null
     }
 }

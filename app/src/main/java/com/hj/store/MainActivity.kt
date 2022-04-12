@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -68,6 +69,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 CLICK_MENU_DELETE -> {
                     Log.d("클릭", "삭제: ")
+
+                    AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.ask_user_store_delete))
+                        .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                            storeViewModel.deleteStore(store.id)
+                        }
+                        .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                        }.create()
+                        .show()
                 }
             }
         })
@@ -82,6 +92,13 @@ class MainActivity : AppCompatActivity() {
         storeViewModel = ViewModelProvider(this)[StoreViewModel::class.java]
         storeViewModel.store.observe(this) { stores ->
             storeAdapter.submitList(stores)
+        }
+
+        storeViewModel.storeRemove.observe(this) { isDelete ->
+            if (isDelete == true) {
+                storeViewModel.getStores()
+                storeViewModel.resetStoreStatus()
+            }
         }
 
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
