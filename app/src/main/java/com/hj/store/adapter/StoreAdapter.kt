@@ -18,6 +18,7 @@ class StoreAdapter(private val clickListener: OnStoreClickListener) : ListAdapte
     class StoreViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
         fun bind(store: Store, clickListener: OnStoreClickListener) {
             val storeImageView = rootView.findViewById<ImageView>(R.id.store_list_imageView)
+
             Glide.with(rootView.context)
                 .load(store.imageUrl)
                 .centerCrop()

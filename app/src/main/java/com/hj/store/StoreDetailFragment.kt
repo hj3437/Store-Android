@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -52,6 +51,7 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val storeDetailViewModel = ViewModelProvider(this)[StoreDetailViewModel::class.java]
 
         storeDetailViewModel.setStore(store)
@@ -68,7 +68,6 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
             Log.d("TAG", "$it")
         })
 
-        val gridLayoutManager = GridLayoutManager(rootView.context, 1)
         val linearLayoutManager = LinearLayoutManager(rootView.context)
         detailList.apply {
             layoutManager = linearLayoutManager

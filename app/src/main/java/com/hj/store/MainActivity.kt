@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(findViewById(R.id.store_toolbar))
+
         storeList = findViewById(R.id.store_list)
 
         storeAdapter = StoreAdapter(OnStoreClickListener { store ->
