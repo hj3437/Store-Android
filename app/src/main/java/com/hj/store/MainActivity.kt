@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     private var storeMenu: Menu? = null
 
+    companion object {
+        const val USER_LOGIN = 1
+        const val USER_GUEST = -1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -81,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (getLoginStatus() == 1) {
+        if (getLoginStatus() == USER_LOGIN) {
             menu?.findItem(R.id.app_bar_login)?.isVisible = false
             menu?.findItem(R.id.app_bar_logout)?.isVisible = true
         } else {
@@ -97,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         storeMenu = menu
 
-        if (getLoginStatus() == 1) {
+        if (getLoginStatus() == USER_LOGIN) {
             menu?.findItem(R.id.app_bar_login)?.isVisible = false
             menu?.findItem(R.id.app_bar_logout)?.isVisible = true
             // menu?.findItem(R.id.app_bar_login)?.title = "로그아웃"
@@ -175,7 +180,7 @@ class MainActivity : AppCompatActivity() {
     private fun setLogout() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            putInt(getString(R.string.saved_user_login_key), -1)
+            putInt(getString(R.string.saved_user_login_key), USER_GUEST)
             apply()
         }
     }
