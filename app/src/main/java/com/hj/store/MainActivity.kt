@@ -2,7 +2,6 @@ package com.hj.store
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -25,12 +24,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var storeViewModel: StoreViewModel
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var toolbar: Toolbar
+
+    private var storeMenu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.store_toolbar)
+        toolbar = findViewById<Toolbar>(R.id.store_toolbar)
         setSupportActionBar(toolbar)
 
         // up 버튼
@@ -71,25 +73,39 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
-
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
-        val userLoginKey = sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
-        Log.d("로그인", "onCreate: $userLoginKey")
     }
 
     override fun onResume() {
         super.onResume()
-
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
-        val userLoginKey = sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
-        Log.d("로그인", "onResume: $userLoginKey")
+        invalidateOptionsMenu()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (getLoginStatus() == 1) {
+            menu?.findItem(R.id.app_bar_login)?.isVisible = false
+            menu?.findItem(R.id.app_bar_logout)?.isVisible = true
+        } else {
+            menu?.findItem(R.id.app_bar_login)?.isVisible = true
+            menu?.findItem(R.id.app_bar_logout)?.isVisible = false
+        }
+
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.store_menu_item, menu)
+
+        storeMenu = menu
+
+        if (getLoginStatus() == 1) {
+            menu?.findItem(R.id.app_bar_login)?.isVisible = false
+            menu?.findItem(R.id.app_bar_logout)?.isVisible = true
+            // menu?.findItem(R.id.app_bar_login)?.title = "로그아웃"
+        } else {
+            menu?.findItem(R.id.app_bar_login)?.isVisible = true
+            menu?.findItem(R.id.app_bar_logout)?.isVisible = false
+            // menu?.findItem(R.id.app_bar_login)?.title = "로그인"
+        }
 
         val appBarSearch = menu?.findItem(R.id.app_bar_search)
         searchView = appBarSearch?.actionView as SearchView
@@ -115,13 +131,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.app_bar_login) {
-            Log.d("TAG", "Login btn")
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, StoreLoginFragment.newInstance())
                 .addToBackStack(null)
                 .commit()
+        } else if (item.itemId == R.id.app_bar_logout) {
+            setLogout()
+            invalidateOptionsMenu()
         }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -144,6 +163,20 @@ class MainActivity : AppCompatActivity() {
             hideKeyboard()
         } else {
             super.onBackPressed()
+        }
+    }
+
+    fun getLoginStatus(): Int {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
+        return sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
+    }
+
+    fun setLogout() {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putInt(getString(com.hj.store.R.string.saved_user_login_key), -1)
+            apply()
         }
     }
 }

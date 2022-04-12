@@ -13,4 +13,5 @@
     <string name="login_success">로그인 성공</string>
     <string name="preference_user_key">logined_user</string>
     <string name="saved_user_login_key">logined_user_save</string>
+    <string name="logout">로그아웃</string>
 </resources>

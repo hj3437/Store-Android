@@ -97,8 +97,6 @@ class StoreLoginFragment() : Fragment() {
         cancelButton.setOnClickListener {
             finish()
         }
-
-
     }
 
     private fun finish() {
