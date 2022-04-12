@@ -1,0 +1,71 @@
+package com.hj.store
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.hj.store.adapter.OnStoreClickListener
+import com.hj.store.adapter.SearchResultAdapter
+import com.hj.store.data.Store
+import com.hj.store.viewmodel.SearchViewModel
+
+class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
+    private lateinit var rootView: View
+    private lateinit var searchResultList: RecyclerView
+    private lateinit var searchResultAdapter: SearchResultAdapter
+    private lateinit var closeButton: TextView
+
+    private lateinit var searchViewModel: SearchViewModel
+
+
+    companion object {
+        fun newInstance(stores: List<Store>) = StoreSearchResultFragment(stores)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        rootView = inflater.inflate(R.layout.store_search_result_fragment, container, false)
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+
+        searchResultList = rootView.findViewById(R.id.search_result_list)
+        searchResultAdapter = SearchResultAdapter(OnStoreClickListener {store->
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.container, StoreDetailFragment.newInstance(store))
+                ?.addToBackStack(null)
+                ?.commit()
+
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        })
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        searchResultList.apply {
+            layoutManager = gridLayoutManager
+            adapter = searchResultAdapter
+            hasFixedSize()
+        }
+
+        searchResultAdapter.submitList(stores)
+
+        closeButton = rootView.findViewById(R.id.search_result_close_button)
+        closeButton.setOnClickListener {
+            Toast.makeText(requireContext(), "CLOSE", Toast.LENGTH_SHORT).show()
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
+    }
+}

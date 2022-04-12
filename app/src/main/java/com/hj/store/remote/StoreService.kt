@@ -17,12 +17,18 @@ val retrofit: Retrofit = Retrofit.Builder()
     .build()
 
 interface StoreService {
+    // 모든 스토어 데이터 호출
     @GET("restaurants/")
     fun getRestaurants(): Call<List<Store>>
 
+    // 특정 스토어 상세화면 데이터 호출
     // https://dosorme.ga/api/restaurants/1/items
     @GET("restaurants/{store}/items")
     fun getRestaurantItems(@Path("store") store: Int): Call<StoreDetail>
+
+    // 스토어 검색
+    @GET("restaurants/search/{storeName}")
+    fun searchRestaurant(@Path("storeName") storeName: String): Call<List<Store>>
 }
 
 object StoreApi {

@@ -2,12 +2,12 @@ package com.hj.store
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +28,12 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         fun newInstance(store: Store) = StoreDetailFragment(store)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // https://developer.android.com/guide/fragments/appbar
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,12 +47,20 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         super.onAttach(context)
         // 프레그먼트 뒷부분 뷰 클릭방지
         activity?.findViewById<RecyclerView>(R.id.store_list)?.visibility = View.INVISIBLE
+
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.store_toolbar)
+        toolbar.title = store.name
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
     }
 
     override fun onDetach() {
         super.onDetach()
         // 프레그먼트 뒷부분 뷰 클릭방지 해재
         activity?.findViewById<RecyclerView>(R.id.store_list)?.visibility = View.VISIBLE
+
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.store_toolbar)
+        toolbar.title = getString(R.string.store)
+        toolbar.setNavigationIcon(R.drawable.watermelon_24x24)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,7 +79,7 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         detailList = rootView.findViewById(R.id.store_detail_list)
 
         storeDetailAdapter = StoreDetailAdapter(OnStoreDetailClickListener {
-            Log.d("TAG", "$it")
+            // TODO
         })
 
         val linearLayoutManager = LinearLayoutManager(rootView.context)

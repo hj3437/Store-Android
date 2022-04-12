@@ -18,7 +18,7 @@ class StoreViewModel : ViewModel() {
         getStores()
     }
 
-    private fun getStores() {
+    fun getStores() {
         StoreApi.storeService.getRestaurants().enqueue(object : Callback<List<Store>> {
             override fun onResponse(
                 call: Call<List<Store>>,

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Store</string>
+    <string name="search">검색</string>
+    <string name="login">로그인</string>
+    <string name="close_search">검색창 종료</string>
+    <string name="search_store">검색하기</string>
+    <string name="store">store</string>
 </resources>
