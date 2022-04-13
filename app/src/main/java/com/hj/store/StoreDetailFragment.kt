@@ -2,17 +2,21 @@ package com.hj.store
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hj.store.MainActivity.Companion.CLICK_MENU_DELETE
+import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
 import com.hj.store.adapter.OnStoreDetailClickListener
 import com.hj.store.adapter.StoreDetailAdapter
 import com.hj.store.data.StoreListWithLogin
@@ -78,8 +82,24 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
 
         detailList = rootView.findViewById(R.id.store_detail_list)
 
-        storeDetailAdapter = StoreDetailAdapter(OnStoreDetailClickListener {
-            // TODO
+        storeDetailAdapter = StoreDetailAdapter(OnStoreDetailClickListener { item, mode ->
+            when (mode) {
+                CLICK_MENU_EDIT -> {
+                    // TODO
+                    Log.d("아이템", "CLICK_MENU_EDIT: $item")
+                }
+                CLICK_MENU_DELETE -> {
+                    Log.d("아이템", "CLICK_MENU_DELETE: $item")
+                    AlertDialog.Builder(requireContext())
+                        .setMessage(getString(R.string.ask_user_store_delete))
+                        .setPositiveButton(getString(R.string.menu_delete)) { _, _ ->
+                            storeDetailViewModel.deleteItem(store.id, item.id)
+                        }
+                        .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                        }.create()
+                        .show()
+                }
+            }
         })
 
         val linearLayoutManager = LinearLayoutManager(rootView.context)

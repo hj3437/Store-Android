@@ -1,5 +1,6 @@
 package com.hj.store.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,6 +33,21 @@ class StoreDetailViewModel : ViewModel() {
 
             override fun onFailure(call: Call<StoreDetail>, t: Throwable) {
                 TODO("Not yet implemented")
+            }
+        })
+    }
+
+    fun deleteItem(storeId: Int, itemId: Int) {
+        StoreApi.storeService.deleteItem(storeId, itemId).enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                Log.d("아이템", "Delete Item onResponse: $response")
+                if(response.isSuccessful && response.code() == 200){
+                    Log.d("아이템", "Delete Item code: 200")
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                Log.d("아이템", " Delete ItemonFailure: $t")
             }
         })
     }

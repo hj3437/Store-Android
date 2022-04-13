@@ -35,4 +35,32 @@
         tools:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/store_detail_item_title_textView"
         app:layout_constraintTop_toBottomOf="@+id/store_detail_item_title_textView" />
+
+    <TextView
+        android:id="@+id/store_detail_item_edit_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_btn"
+        android:padding="4dp"
+        android:text="@string/menu_edit"
+        android:textSize="12sp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/store_detail_item_price_textView"
+        app:layout_constraintTop_toBottomOf="@+id/store_detail_item_price_textView"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/store_detail_item_delete_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_btn"
+        android:padding="4dp"
+        android:text="@string/menu_delete"
+        android:textSize="12sp"
+        android:layout_marginLeft="4dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/store_detail_item_edit_textView"
+        app:layout_constraintTop_toTopOf="@+id/store_detail_item_edit_textView"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,12 @@ interface StoreService {
 
     @POST("restaurants/")
     fun addStore(@Body store: Store): Call<Void>
+
+    @DELETE("restaurants/{storeId}/items/{itemId}")
+    fun deleteItem(
+        @Path("storeId") storeId: Int,
+        @Path("itemId") itemId: Int
+    ): Call<Void>
 }
 
 interface StoreLoginService {
