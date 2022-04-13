@@ -18,6 +18,9 @@ class StoreDetailViewModel : ViewModel() {
     private var _storeDetail = MutableLiveData<StoreDetail>()
     val storeDetail: LiveData<StoreDetail> get() = _storeDetail
 
+    private var _storeItemRemove = MutableLiveData<Boolean?>(false)
+    val storeItemRemove: LiveData<Boolean?> = _storeItemRemove
+
     fun setStore(storeInfo: StoreListWithLogin) {
         _store.value = storeInfo
         getStoreItems(storeInfo.id)
@@ -42,7 +45,7 @@ class StoreDetailViewModel : ViewModel() {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 Log.d("아이템", "Delete Item onResponse: $response")
                 if(response.isSuccessful && response.code() == 200){
-                    Log.d("아이템", "Delete Item code: 200")
+                    _storeItemRemove.value = true
                 }
             }
 
@@ -50,5 +53,9 @@ class StoreDetailViewModel : ViewModel() {
                 Log.d("아이템", " Delete ItemonFailure: $t")
             }
         })
+    }
+
+    fun resetStoreItemRemoveState(){
+        _storeItemRemove.value = null
     }
 }

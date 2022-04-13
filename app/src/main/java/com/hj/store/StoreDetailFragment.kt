@@ -28,6 +28,9 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
     private lateinit var detailList: RecyclerView
     private lateinit var storeDetailAdapter: StoreDetailAdapter
 
+    private lateinit var storeDetailViewModel: StoreDetailViewModel
+
+
     companion object {
         fun newInstance(store: StoreListWithLogin) = StoreDetailFragment(store)
     }
@@ -70,7 +73,7 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val storeDetailViewModel = ViewModelProvider(this)[StoreDetailViewModel::class.java]
+        storeDetailViewModel = ViewModelProvider(this)[StoreDetailViewModel::class.java]
 
         storeDetailViewModel.setStore(store)
 
@@ -89,7 +92,6 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
                     Log.d("아이템", "CLICK_MENU_EDIT: $item")
                 }
                 CLICK_MENU_DELETE -> {
-                    Log.d("아이템", "CLICK_MENU_DELETE: $item")
                     AlertDialog.Builder(requireContext())
                         .setMessage(getString(R.string.ask_user_store_delete))
                         .setPositiveButton(getString(R.string.menu_delete)) { _, _ ->
@@ -124,5 +126,16 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
         storeDetailViewModel.storeDetail.observe(viewLifecycleOwner) { storeDetail ->
             storeDetailAdapter.submitList(storeDetail.items)
         }
+
+        storeDetailViewModel.storeItemRemove.observe(viewLifecycleOwner) { isDelete ->
+            if (isDelete == true) {
+                refreshItem()
+                storeDetailViewModel.resetStoreItemRemoveState()
+            }
+        }
+    }
+
+    fun refreshItem() {
+        storeDetailViewModel.setStore(store)
     }
 }
