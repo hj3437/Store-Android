@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hj.store.data.StoreDetail
+import com.hj.store.data.StoreDetailEditItem
 import com.hj.store.data.StoreListWithLogin
 import com.hj.store.remote.StoreApi
 import retrofit2.Call
@@ -20,6 +21,9 @@ class StoreDetailViewModel : ViewModel() {
 
     private var _storeItemRemove = MutableLiveData<Boolean?>(false)
     val storeItemRemove: LiveData<Boolean?> = _storeItemRemove
+
+    private var _storeItemEdit = MutableLiveData<Boolean?>(false)
+    val storeItemEdit: LiveData<Boolean?> = _storeItemEdit
 
     fun setStore(storeInfo: StoreListWithLogin) {
         _store.value = storeInfo
@@ -55,7 +59,26 @@ class StoreDetailViewModel : ViewModel() {
         })
     }
 
+    fun editItem(storeId: Int, itemId: Int, storeItem:StoreDetailEditItem){
+        StoreApi.storeService.editItem(storeId, itemId, storeItem).enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                Log.d("아이템", " 편집 Item onResponse: $response")
+                if(response.isSuccessful && response.code() == 200){
+                    _storeItemEdit.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                Log.d("아이템", " 편집 Item onFailure: $t")
+            }
+        })
+    }
+
     fun resetStoreItemRemoveState(){
         _storeItemRemove.value = null
+    }
+
+    fun resetStoreItemEditState(){
+        _storeItemEdit.value = null
     }
 }

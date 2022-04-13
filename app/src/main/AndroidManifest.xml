@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".StoreDetailEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".StoreEditActivity"
             android:exported="false" />
         <activity

@@ -1,8 +1,8 @@
 package com.hj.store
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hj.store.MainActivity.Companion.CLICK_MENU_DELETE
 import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
+import com.hj.store.MainActivity.Companion.INTENT_STORE_ID
+import com.hj.store.MainActivity.Companion.INTENT_STORE_MODE
 import com.hj.store.adapter.OnStoreDetailClickListener
 import com.hj.store.adapter.StoreDetailAdapter
 import com.hj.store.data.StoreListWithLogin
@@ -30,9 +32,13 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
 
     private lateinit var storeDetailViewModel: StoreDetailViewModel
 
-
     companion object {
         fun newInstance(store: StoreListWithLogin) = StoreDetailFragment(store)
+
+        const val INTENT_STORE_ITEM_ID = "storeItemId"
+        const val INTENT_STORE_ITEM_NAME = "storeItemName"
+        const val INTENT_STORE_ITEM_PRICE = "storeItemPrice"
+        const val INTENT_STORE_ITEM_IMAGEURL = "storeItemImageUrl"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,8 +94,14 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
         storeDetailAdapter = StoreDetailAdapter(OnStoreDetailClickListener { item, mode ->
             when (mode) {
                 CLICK_MENU_EDIT -> {
-                    // TODO
-                    Log.d("아이템", "CLICK_MENU_EDIT: $item")
+                    val intent = Intent(requireContext(), StoreDetailEditActivity::class.java)
+                    intent.putExtra(INTENT_STORE_MODE, CLICK_MENU_EDIT)
+                    intent.putExtra(INTENT_STORE_ID, item.storeId)
+                    intent.putExtra(INTENT_STORE_ITEM_ID, item.id)
+                    intent.putExtra(INTENT_STORE_ITEM_NAME, item.name)
+                    intent.putExtra(INTENT_STORE_ITEM_PRICE, item.price)
+                    intent.putExtra(INTENT_STORE_ITEM_IMAGEURL, item.imageUrl)
+                    startActivity(intent)
                 }
                 CLICK_MENU_DELETE -> {
                     AlertDialog.Builder(requireContext())
@@ -129,13 +141,18 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
 
         storeDetailViewModel.storeItemRemove.observe(viewLifecycleOwner) { isDelete ->
             if (isDelete == true) {
-                refreshItem()
+                refreshItems()
                 storeDetailViewModel.resetStoreItemRemoveState()
             }
         }
     }
 
-    fun refreshItem() {
+    override fun onResume() {
+        super.onResume()
+        refreshItems()
+    }
+
+    private fun refreshItems() {
         storeDetailViewModel.setStore(store)
     }
 }

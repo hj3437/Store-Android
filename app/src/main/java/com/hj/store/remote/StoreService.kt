@@ -2,6 +2,7 @@ package com.hj.store.remote
 
 import com.hj.store.data.Store
 import com.hj.store.data.StoreDetail
+import com.hj.store.data.StoreDetailEditItem
 import com.hj.store.data.User
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -24,7 +25,6 @@ interface StoreService {
     fun getRestaurants(): Call<List<Store>>
 
     // 특정 스토어 상세화면 데이터 호출
-    // https://dosorme.ga/api/restaurants/1/items
     @GET("restaurants/{store}/items")
     fun getRestaurantItems(@Path("store") store: Int): Call<StoreDetail>
 
@@ -35,7 +35,6 @@ interface StoreService {
     @DELETE("restaurants/{storeId}")
     fun deleteRestaurant(@Path("storeId") storeId: Int): Call<Void>
 
-    // https://dosorme.ga/api/restaurants
     @PUT("restaurants/{storeId}/")
     fun editStore(
         @Path("storeId") storeId: Int,
@@ -49,6 +48,14 @@ interface StoreService {
     fun deleteItem(
         @Path("storeId") storeId: Int,
         @Path("itemId") itemId: Int
+    ): Call<Void>
+
+    // 스토어 아이템 편집
+    @PUT("restaurants/{storeId}/items/{itemId}")
+    fun editItem(
+        @Path("storeId") storeId: Int,
+        @Path("itemId") itemId: Int,
+        @Body storeItem: StoreDetailEditItem
     ): Call<Void>
 }
 

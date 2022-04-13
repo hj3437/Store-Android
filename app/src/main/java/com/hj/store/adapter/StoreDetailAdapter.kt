@@ -75,7 +75,7 @@ class StoreDetailAdapter(private val clickListener: OnStoreDetailClickListener) 
 
 object StoreDetailItemDiffUtil : DiffUtil.ItemCallback<StoreDetailItem>() {
     override fun areItemsTheSame(oldItem: StoreDetailItem, newItem: StoreDetailItem) =
-        oldItem.id == newItem.id
+        oldItem.name == newItem.name
 
     override fun areContentsTheSame(oldItem: StoreDetailItem, newItem: StoreDetailItem) =
         oldItem == newItem

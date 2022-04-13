@@ -25,4 +25,6 @@
     <string name="store_address">주소</string>
     <string name="store_name">스토어 이름</string>
     <string name="store_new">새스토어 생성</string>
+    <string name="store_item_name">메뉴명</string>
+    <string name="store_item_price">가격</string>
 </resources>
