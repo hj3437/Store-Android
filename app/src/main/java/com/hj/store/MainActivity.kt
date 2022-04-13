@@ -1,7 +1,9 @@
 package com.hj.store
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.StoreAdapter
+import com.hj.store.data.Store
 import com.hj.store.viewmodel.SearchViewModel
+import com.hj.store.viewmodel.StoreEditViewModel
 import com.hj.store.viewmodel.StoreViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var storeViewModel: StoreViewModel
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var storeEditViewModel: StoreEditViewModel
     private lateinit var toolbar: Toolbar
 
     private var storeMenu: Menu? = null
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         storeList = findViewById(R.id.store_list)
+        storeEditViewModel = ViewModelProvider(this)[StoreEditViewModel::class.java]
 
         storeAdapter = StoreAdapter(OnStoreClickListener { store, mode ->
             when (mode) {
@@ -64,19 +70,7 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
                 CLICK_MENU_EDIT -> {
-                    AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.ask_user_store_edit))
-                        .setPositiveButton(getString(R.string.menu_edit)) { _, _ ->
-                            // TODO
-                            supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.container, StoreEditFragment.newInstance(store))
-                                .addToBackStack(null)
-                                .commit()
-                        }
-                        .setNegativeButton(getString(R.string.cancel)) { _, _ ->
-                        }.create()
-                        .show()
+                    askUserToEditMode(store)
                 }
                 CLICK_MENU_DELETE -> {
                     AlertDialog.Builder(this)
@@ -122,7 +116,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        invalidateOptionsMenu()
+        Log.d("스토어", "onResume: ")
+        refresh()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -186,12 +181,26 @@ class MainActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
             }
             R.id.app_bar_refresh -> {
-                storeViewModel.getStores()
-                invalidateOptionsMenu()
+                refresh()
             }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (!searchView.isIconified) {
+            searchView.isIconified = true
+            hideKeyboard()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun refresh() {
+        Log.d("스토어", "refresh")
+        storeViewModel.getStores()
+        invalidateOptionsMenu()
     }
 
     private fun hideKeyboard() {
@@ -207,15 +216,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        if (!searchView.isIconified) {
-            searchView.isIconified = true
-            hideKeyboard()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     private fun getLoginStatus(): Int {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
@@ -228,5 +228,21 @@ class MainActivity : AppCompatActivity() {
             putInt(getString(R.string.saved_user_login_key), USER_GUEST)
             apply()
         }
+    }
+
+    private fun askUserToEditMode(store: Store) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.ask_user_store_edit))
+            .setPositiveButton(getString(R.string.menu_edit)) { _, _ ->
+                val intent = Intent(this, StoreEditActivity::class.java)
+                intent.putExtra("storeId", store.id)
+                intent.putExtra("storeName", store.name)
+                intent.putExtra("storeAddress", store.address)
+                intent.putExtra("storeImageUrl", store.imageUrl)
+                startActivity(intent)
+            }
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+            }.create()
+            .show()
     }
 }

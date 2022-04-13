@@ -17,6 +17,8 @@ val retrofit: Retrofit = Retrofit.Builder()
     .build()
 
 interface StoreService {
+    @Headers("accept: application/json", "content-type: application/json")
+
     // 모든 스토어 데이터 호출
     @GET("restaurants/")
     fun getRestaurants(): Call<List<Store>>
@@ -32,6 +34,19 @@ interface StoreService {
 
     @DELETE("restaurants/{storeId}")
     fun deleteRestaurant(@Path("storeId") storeId: Int): Call<Void>
+
+    // https://dosorme.ga/api/restaurants
+    @PUT("restaurants/{storeId}/")
+    fun editStore(
+        @Path("storeId") storeId: Int,
+        @Body store: Store
+    ): Call<Void>
+
+    @POST("restaurants/{storeId}/")
+    fun addStore(
+        @Path("storeId") storeId: Int,
+        @Body store: Store
+    ): Call<Void>
 }
 
 interface StoreLoginService {

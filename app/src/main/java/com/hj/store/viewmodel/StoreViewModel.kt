@@ -1,5 +1,6 @@
 package com.hj.store.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,9 @@ class StoreViewModel : ViewModel() {
     private var _storeRemove = MutableLiveData<Boolean?>(false)
     val storeRemove: LiveData<Boolean?> = _storeRemove
 
+    private var _storeEditFragmentRemove = MutableLiveData<Boolean?>(false)
+    val storeEditFragmentRemove: LiveData<Boolean?> = _storeEditFragmentRemove
+
     init {
         getStores()
     }
@@ -28,6 +32,7 @@ class StoreViewModel : ViewModel() {
                 response: Response<List<Store>>
             ) {
                 if (response.isSuccessful) {
+                    Log.d("스토어", " getStores(): 호출됨")
                     _stores.value = response.body() ?: emptyList()
                 }
             }
@@ -55,5 +60,9 @@ class StoreViewModel : ViewModel() {
 
     fun resetStoreStatus() {
         _storeRemove.value = null
+    }
+
+    fun setEditFragmentStatus(b: Boolean) {
+        _storeEditFragmentRemove.value = b
     }
 }
