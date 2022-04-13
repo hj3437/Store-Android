@@ -1,7 +1,6 @@
 package com.hj.store
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +37,7 @@ class StoreEditActivity : AppCompatActivity() {
             val imageUrlStr = imageUrlEditText.text.toString()
 
             if (titleStr.isNotEmpty() && addressStr.isNotEmpty() && imageUrlStr.isNotEmpty()) {
-                Log.d("스토어 편집", "$titleStr, $addressStr, $imageUrlStr")
+                // Log.d("스토어 편집", "$titleStr, $addressStr, $imageUrlStr")
                 val newStore = Store(
                     id = storeId,
                     name = titleStr,

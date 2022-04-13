@@ -3,7 +3,6 @@ package com.hj.store
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -113,7 +112,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("스토어", "onResume: ")
         refresh()
     }
 
@@ -195,7 +193,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refresh() {
-        Log.d("스토어", "refresh")
         storeViewModel.getStores()
         invalidateOptionsMenu()
     }
