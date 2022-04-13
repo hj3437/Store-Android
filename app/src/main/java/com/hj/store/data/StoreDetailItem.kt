@@ -5,5 +5,6 @@ data class StoreDetailItem(
     var name: String = "",
     var price: Int = 0,
     var storeId: Int = 0,
-    var imageUrl: String = ""
+    var imageUrl: String = "",
+    var isLogin: Boolean = false
 )

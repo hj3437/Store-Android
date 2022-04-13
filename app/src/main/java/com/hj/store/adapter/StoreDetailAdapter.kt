@@ -46,17 +46,25 @@ class StoreDetailAdapter(private val clickListener: OnStoreDetailClickListener) 
             itemPriceTextView.text = "${price}원"
 
             val editTextView = rootView.findViewById<TextView>(R.id.store_detail_item_edit_textView)
-            editTextView.visibility = View.VISIBLE
 
-            editTextView.setOnClickListener {
-                clickListener.clickListener(item, CLICK_MENU_EDIT)
-            }
 
             val deleteTextView =
                 rootView.findViewById<TextView>(R.id.store_detail_item_delete_textView)
-            deleteTextView.visibility = View.VISIBLE
-            deleteTextView.setOnClickListener {
-                clickListener.clickListener(item, CLICK_MENU_DELETE)
+
+
+            if (item.isLogin) {
+                editTextView.visibility = View.VISIBLE
+                editTextView.setOnClickListener {
+                    clickListener.clickListener(item, CLICK_MENU_EDIT)
+                }
+
+                deleteTextView.visibility = View.VISIBLE
+                deleteTextView.setOnClickListener {
+                    clickListener.clickListener(item, CLICK_MENU_DELETE)
+                }
+            } else {
+                editTextView.visibility = View.INVISIBLE
+                deleteTextView.visibility = View.INVISIBLE
             }
         }
     }
@@ -81,6 +89,6 @@ object StoreDetailItemDiffUtil : DiffUtil.ItemCallback<StoreDetailItem>() {
         oldItem == newItem
 }
 
-class OnStoreDetailClickListener(val clickListener: (item: StoreDetailItem, mode:String) -> Unit) {
-    fun onClick(item: StoreDetailItem, mode:String) = clickListener(item, mode)
+class OnStoreDetailClickListener(val clickListener: (item: StoreDetailItem, mode: String) -> Unit) {
+    fun onClick(item: StoreDetailItem, mode: String) = clickListener(item, mode)
 }

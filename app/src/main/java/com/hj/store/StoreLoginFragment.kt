@@ -16,12 +16,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StoreLoginFragment(val onLogin: onLoginListener) : Fragment() {
+class StoreLoginFragment(val onLogin: OnLoginListener) : Fragment() {
 
     private lateinit var rootView: View
 
     companion object {
-        fun newInstance(isLogin:onLoginListener) = StoreLoginFragment(isLogin)
+        fun newInstance(isLogin:OnLoginListener) = StoreLoginFragment(isLogin)
     }
 
     override fun onCreateView(
@@ -105,9 +105,6 @@ class StoreLoginFragment(val onLogin: onLoginListener) : Fragment() {
     }
 }
 
-//class OnStoreClickListener(val clickListener: (store: StoreListWithLogin, mode: String) -> Unit) {
-//    fun onClick(store: StoreListWithLogin, mode: String) = clickListener(store, mode)
-//}
-class onLoginListener(val loginListener: (isLogin: Boolean) -> Unit) {
+class OnLoginListener(val loginListener: (isLogin: Boolean) -> Unit) {
     fun onLogin(isLogin: Boolean) = loginListener(isLogin)
 }

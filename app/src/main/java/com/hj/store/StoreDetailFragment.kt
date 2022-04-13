@@ -23,6 +23,7 @@ import com.hj.store.MainActivity.Companion.INTENT_STORE_ID
 import com.hj.store.MainActivity.Companion.INTENT_STORE_MODE
 import com.hj.store.adapter.OnStoreDetailClickListener
 import com.hj.store.adapter.StoreDetailAdapter
+import com.hj.store.data.StoreDetailItem
 import com.hj.store.data.StoreListWithLogin
 import com.hj.store.viewmodel.StoreDetailViewModel
 
@@ -147,7 +148,8 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
         }
 
         storeDetailViewModel.storeDetail.observe(viewLifecycleOwner) { storeDetail ->
-            storeDetailAdapter.submitList(storeDetail.items)
+            val convertedItem = convertItemLogin(storeDetail.items)
+            storeDetailAdapter.submitList(convertedItem)
         }
 
         storeDetailViewModel.storeItemRemove.observe(viewLifecycleOwner) { isDelete ->
@@ -166,4 +168,29 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
     private fun refreshItems() {
         storeDetailViewModel.setStore(store)
     }
+
+    private fun getLoginStatus(): Int {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val defaultValue = resources.getInteger(R.integer.guestuser_default_key)
+        return sharedPref.getInt(getString(R.string.saved_user_login_key), defaultValue)
+    }
+
+    private fun convertItemLogin(storeDetailItem: List<StoreDetailItem>): List<StoreDetailItem> {
+        var isLogin = false
+        if (getLoginStatus() == 1) {
+            isLogin = true
+        }
+
+        return storeDetailItem.map { item ->
+            StoreDetailItem(
+                item.id,
+                item.name,
+                item.price,
+                item.storeId,
+                item.imageUrl,
+                isLogin = isLogin
+            )
+        }
+    }
+
 }

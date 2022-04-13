@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_login -> {
-                val newInstance = StoreLoginFragment.newInstance(onLoginListener { islogin ->
+                val newInstance = StoreLoginFragment.newInstance(OnLoginListener { islogin ->
                     if (islogin) {
                         storeViewModel.store.value.let { stores ->
                             if (stores != null) {
@@ -201,6 +201,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 })
+                supportFragmentManager.popBackStack()
 
                 supportFragmentManager
                     .beginTransaction()
@@ -216,6 +217,7 @@ class MainActivity : AppCompatActivity() {
                         storeAdapter.submitList(convertStoreWithLogin)
                     }
                 }
+                supportFragmentManager.popBackStack()
                 invalidateOptionsMenu()
             }
             R.id.app_bar_refresh -> {
