@@ -57,6 +57,12 @@ interface StoreService {
         @Path("itemId") itemId: Int,
         @Body storeItem: StoreDetailEditItem
     ): Call<Void>
+
+    @POST("restaurants/{storeId}/items/")
+    fun addItem(
+        @Path("storeId") storeId: Int,
+        @Body storeItem: StoreDetailEditItem
+    ):Call<Void>
 }
 
 interface StoreLoginService {

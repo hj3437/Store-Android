@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
+import com.hj.store.MainActivity.Companion.CLICK_MENU_NEW
 import com.hj.store.MainActivity.Companion.INTENT_STORE_MODE
 import com.hj.store.data.StoreDetailEditItem
 import com.hj.store.viewmodel.StoreDetailViewModel
@@ -32,10 +33,17 @@ class StoreDetailEditActivity : AppCompatActivity() {
         val itemPrice = intent.getIntExtra(StoreDetailFragment.INTENT_STORE_ITEM_PRICE, 0)
         val itemImageUrl = intent.getStringExtra(StoreDetailFragment.INTENT_STORE_ITEM_IMAGEURL)
 
-        if (mode == CLICK_MENU_EDIT) {
-            titleEditText.setText(itemName)
-            priceEditText.setText("$itemPrice")
-            imageUrlEditText.setText(itemImageUrl)
+        when (mode) {
+            CLICK_MENU_EDIT -> {
+                titleEditText.setText(itemName)
+                priceEditText.setText("$itemPrice")
+                imageUrlEditText.setText(itemImageUrl)
+            }
+            CLICK_MENU_NEW -> {
+                titleEditText.setText("")
+                priceEditText.setText("")
+                imageUrlEditText.setText("")
+            }
         }
 
         val saveButton = findViewById<Button>(R.id.store_item_save_button)
@@ -47,7 +55,14 @@ class StoreDetailEditActivity : AppCompatActivity() {
             Log.d("아이템", "편집중... $titleStr, $priceStr, $imageUrlStr")
             if (titleStr.isNotEmpty() && priceStr.isNotEmpty() && imageUrlStr.isNotEmpty()) {
                 val storeItem = StoreDetailEditItem(titleStr, priceStr, imageUrlStr)
-                storeDetailViewModel.editItem(storeId, itemId, storeItem)
+                when (mode) {
+                    CLICK_MENU_EDIT -> {
+                        storeDetailViewModel.editItem(storeId, itemId, storeItem)
+                    }
+                    CLICK_MENU_NEW -> {
+                        storeDetailViewModel.addItem(storeId, storeItem)
+                    }
+                }
             }
         }
 
@@ -58,6 +73,13 @@ class StoreDetailEditActivity : AppCompatActivity() {
 
         storeDetailViewModel.storeItemEdit.observe(this) { isEditFinish ->
             if (isEditFinish == true) {
+                storeDetailViewModel.resetStoreItemEditState()
+                finish()
+            }
+        }
+        storeDetailViewModel.storeItemAdd.observe(this) { isAddFinish ->
+            if (isAddFinish == true) {
+                storeDetailViewModel.resetStoreItemAddState()
                 finish()
             }
         }

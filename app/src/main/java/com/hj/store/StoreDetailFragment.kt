@@ -15,8 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hj.store.MainActivity.Companion.CLICK_MENU_DELETE
 import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
+import com.hj.store.MainActivity.Companion.CLICK_MENU_NEW
 import com.hj.store.MainActivity.Companion.INTENT_STORE_ID
 import com.hj.store.MainActivity.Companion.INTENT_STORE_MODE
 import com.hj.store.adapter.OnStoreDetailClickListener
@@ -121,6 +123,15 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
             layoutManager = linearLayoutManager
             adapter = storeDetailAdapter
             hasFixedSize()
+        }
+
+        val addActionButton =
+            rootView.findViewById<FloatingActionButton>(R.id.store_detail_add_floatingActionButton)
+        addActionButton.setOnClickListener {
+            val intent = Intent(requireContext(), StoreDetailEditActivity::class.java)
+            intent.putExtra(INTENT_STORE_MODE, CLICK_MENU_NEW)
+            intent.putExtra(INTENT_STORE_ID, store.id)
+            startActivity(intent)
         }
 
         storeDetailViewModel.store.observe(viewLifecycleOwner) { store ->

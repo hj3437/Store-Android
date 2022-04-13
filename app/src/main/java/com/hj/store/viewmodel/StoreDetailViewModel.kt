@@ -25,6 +25,9 @@ class StoreDetailViewModel : ViewModel() {
     private var _storeItemEdit = MutableLiveData<Boolean?>(false)
     val storeItemEdit: LiveData<Boolean?> = _storeItemEdit
 
+    private var _storeItemAdd = MutableLiveData<Boolean?>(false)
+    val storeItemAdd: LiveData<Boolean?> = _storeItemAdd
+
     fun setStore(storeInfo: StoreListWithLogin) {
         _store.value = storeInfo
         getStoreItems(storeInfo.id)
@@ -74,11 +77,30 @@ class StoreDetailViewModel : ViewModel() {
         })
     }
 
+    fun addItem(storeId: Int, storeItem: StoreDetailEditItem) {
+        StoreApi.storeService.addItem(storeId, storeItem).enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                Log.d("아이템", " 추가 Item onResponse: $response")
+                if(response.isSuccessful && response.code() == 200){
+                    _storeItemAdd.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                Log.d("아이템", " 추가 Item onFailure: $t")
+            }
+        })
+    }
+
     fun resetStoreItemRemoveState(){
         _storeItemRemove.value = null
     }
 
     fun resetStoreItemEditState(){
         _storeItemEdit.value = null
+    }
+
+    fun resetStoreItemAddState(){
+        _storeItemAdd.value = null
     }
 }
