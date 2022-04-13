@@ -19,7 +19,6 @@ import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.StoreAdapter
 import com.hj.store.data.Store
 import com.hj.store.viewmodel.SearchViewModel
-import com.hj.store.viewmodel.StoreEditViewModel
 import com.hj.store.viewmodel.StoreViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var storeViewModel: StoreViewModel
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var storeEditViewModel: StoreEditViewModel
     private lateinit var toolbar: Toolbar
 
     private var storeMenu: Menu? = null
@@ -58,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         storeList = findViewById(R.id.store_list)
-        storeEditViewModel = ViewModelProvider(this)[StoreEditViewModel::class.java]
 
         storeAdapter = StoreAdapter(OnStoreClickListener { store, mode ->
             when (mode) {

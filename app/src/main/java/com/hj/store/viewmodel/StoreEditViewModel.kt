@@ -17,7 +17,6 @@ class StoreEditViewModel : ViewModel() {
     fun editStore(id: Int, store: Store) {
         StoreApi.storeService.editStore(id, store).enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
-                Log.d("스토어 편집", "onResponse: $response")
                 if (response.isSuccessful && response.code() == 200) {
                     _storeEdit.value = true
                 }
