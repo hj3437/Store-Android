@@ -42,11 +42,8 @@ interface StoreService {
         @Body store: Store
     ): Call<Void>
 
-    @POST("restaurants/{storeId}/")
-    fun addStore(
-        @Path("storeId") storeId: Int,
-        @Body store: Store
-    ): Call<Void>
+    @POST("restaurants/")
+    fun addStore(@Body store: Store): Call<Void>
 }
 
 interface StoreLoginService {

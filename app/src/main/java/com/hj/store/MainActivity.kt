@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.StoreAdapter
 import com.hj.store.data.Store
+import com.hj.store.data.StoreListWithLogin
 import com.hj.store.viewmodel.SearchViewModel
 import com.hj.store.viewmodel.StoreViewModel
 
@@ -34,9 +35,16 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val USER_LOGIN = 1
         const val USER_GUEST = -1
+        const val CLICK_MENU_NEW = "new"
         const val CLICK_MENU_EDIT = "edit"
         const val CLICK_MENU_DELETE = "delete"
         const val CLICK_STORE = "detail"
+
+        const val INTENT_STORE_MODE = "storeMode"
+        const val INTENT_STORE_ID = "storeId"
+        const val INTENT_STORE_NAME = "storeName"
+        const val INTENT_STORE_ADDRESS = "storeAddress"
+        const val INTENT_STORE_IMAGEURL = "storeImageUrl"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.store_toolbar)
+        toolbar.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
 
         // up 버튼
@@ -90,7 +99,8 @@ class MainActivity : AppCompatActivity() {
 
         storeViewModel = ViewModelProvider(this)[StoreViewModel::class.java]
         storeViewModel.store.observe(this) { stores ->
-            storeAdapter.submitList(stores)
+            val convertStoreWithLogin = convertStoreWithLogin(stores)
+            storeAdapter.submitList(convertStoreWithLogin)
         }
 
         storeViewModel.storeRemove.observe(this) { isDelete ->
@@ -102,11 +112,26 @@ class MainActivity : AppCompatActivity() {
 
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         searchViewModel.searchStore.observe(this) { stores ->
+            val convertStoreWithLogin = convertStoreWithLogin(stores)
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, StoreSearchResultFragment.newInstance(stores))
+                .replace(
+                    R.id.container,
+                    StoreSearchResultFragment.newInstance(convertStoreWithLogin)
+                )
                 .addToBackStack(null)
                 .commit()
+        }
+    }
+
+    private fun convertStoreWithLogin(stores: List<Store>): List<StoreListWithLogin> {
+        var isLogin = false
+        if (getLoginStatus() == 1) {
+            isLogin = true
+        }
+
+        return stores.map { store ->
+            StoreListWithLogin(store.id, store.name, store.address, store.imageUrl, isLogin)
         }
     }
 
@@ -119,11 +144,12 @@ class MainActivity : AppCompatActivity() {
         if (getLoginStatus() == USER_LOGIN) {
             menu?.findItem(R.id.app_bar_login)?.isVisible = false
             menu?.findItem(R.id.app_bar_logout)?.isVisible = true
+            menu?.findItem(R.id.app_bar_new_store)?.isVisible = true
         } else {
             menu?.findItem(R.id.app_bar_login)?.isVisible = true
             menu?.findItem(R.id.app_bar_logout)?.isVisible = false
+            menu?.findItem(R.id.app_bar_new_store)?.isVisible = false
         }
-
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -165,18 +191,40 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_login -> {
+                val newInstance = StoreLoginFragment.newInstance(onLoginListener { islogin ->
+                    if (islogin) {
+                        storeViewModel.store.value.let { stores ->
+                            if (stores != null) {
+                                val convertStoreWithLogin = convertStoreWithLogin(stores)
+                                storeAdapter.submitList(convertStoreWithLogin)
+                            }
+                        }
+                    }
+                })
+
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container, StoreLoginFragment.newInstance())
+                    .replace(R.id.container, newInstance)
                     .addToBackStack(null)
                     .commit()
             }
             R.id.app_bar_logout -> {
                 setLogout()
+                storeViewModel.store.value.let { stores ->
+                    if (stores != null) {
+                        val convertStoreWithLogin = convertStoreWithLogin(stores)
+                        storeAdapter.submitList(convertStoreWithLogin)
+                    }
+                }
                 invalidateOptionsMenu()
             }
             R.id.app_bar_refresh -> {
                 refresh()
+            }
+            R.id.app_bar_new_store -> {
+                val intent = Intent(this, StoreEditActivity::class.java)
+                intent.putExtra("storeMode", CLICK_MENU_NEW)
+                startActivity(intent)
             }
         }
 
@@ -224,15 +272,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun askUserToEditMode(store: Store) {
+    private fun askUserToEditMode(store: StoreListWithLogin) {
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.ask_user_store_edit))
             .setPositiveButton(getString(R.string.menu_edit)) { _, _ ->
                 val intent = Intent(this, StoreEditActivity::class.java)
-                intent.putExtra("storeId", store.id)
-                intent.putExtra("storeName", store.name)
-                intent.putExtra("storeAddress", store.address)
-                intent.putExtra("storeImageUrl", store.imageUrl)
+                intent.putExtra(INTENT_STORE_MODE, CLICK_MENU_EDIT)
+                intent.putExtra(INTENT_STORE_ID, store.id)
+                intent.putExtra(INTENT_STORE_NAME, store.name)
+                intent.putExtra(INTENT_STORE_ADDRESS, store.address)
+                intent.putExtra(INTENT_STORE_IMAGEURL, store.imageUrl)
                 startActivity(intent)
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ ->

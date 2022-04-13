@@ -3,21 +3,21 @@ package com.hj.store.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hj.store.data.Store
 import com.hj.store.data.StoreDetail
+import com.hj.store.data.StoreListWithLogin
 import com.hj.store.remote.StoreApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class StoreDetailViewModel : ViewModel() {
-    private var _store = MutableLiveData<Store>()
-    val store: LiveData<Store> get() = _store
+    private var _store = MutableLiveData<StoreListWithLogin>()
+    val store: LiveData<StoreListWithLogin> get() = _store
 
     private var _storeDetail = MutableLiveData<StoreDetail>()
     val storeDetail: LiveData<StoreDetail> get() = _storeDetail
 
-    fun setStore(storeInfo: Store) {
+    fun setStore(storeInfo: StoreListWithLogin) {
         _store.value = storeInfo
         getStoreItems(storeInfo.id)
     }

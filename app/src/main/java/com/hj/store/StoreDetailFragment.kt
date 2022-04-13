@@ -15,17 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hj.store.adapter.OnStoreDetailClickListener
 import com.hj.store.adapter.StoreDetailAdapter
-import com.hj.store.data.Store
+import com.hj.store.data.StoreListWithLogin
 import com.hj.store.viewmodel.StoreDetailViewModel
 
-class StoreDetailFragment(private val store: Store) : Fragment() {
+class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
 
     private lateinit var rootView: View
     private lateinit var detailList: RecyclerView
     private lateinit var storeDetailAdapter: StoreDetailAdapter
 
     companion object {
-        fun newInstance(store: Store) = StoreDetailFragment(store)
+        fun newInstance(store: StoreListWithLogin) = StoreDetailFragment(store)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class StoreDetailFragment(private val store: Store) : Fragment() {
         activity?.findViewById<RecyclerView>(R.id.store_list)?.visibility = View.VISIBLE
 
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.store_toolbar)
-        toolbar.title = getString(R.string.store)
+        toolbar.title = getString(R.string.app_name)
         toolbar.setNavigationIcon(R.drawable.watermelon_24x24)
     }
 

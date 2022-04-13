@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hj.store.MainActivity.Companion.CLICK_MENU_DELETE
-import com.hj.store.MainActivity.Companion.CLICK_MENU_EDIT
+import com.hj.store.MainActivity
 import com.hj.store.MainActivity.Companion.CLICK_STORE
 import com.hj.store.R
-import com.hj.store.data.Store
+import com.hj.store.data.StoreListWithLogin
 
 
 class StoreAdapter(private val clickListener: OnStoreClickListener) :
-    ListAdapter<Store, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
+    ListAdapter<StoreListWithLogin, StoreAdapter.StoreViewHolder>(StoreDiffUtil) {
+
     class StoreViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
-        fun bind(store: Store, clickListener: OnStoreClickListener) {
+        fun bind(store: StoreListWithLogin, clickListener: OnStoreClickListener) {
             val storeImageView = rootView.findViewById<ImageView>(R.id.store_list_imageView)
 
             Glide.with(rootView.context)
@@ -38,17 +38,24 @@ class StoreAdapter(private val clickListener: OnStoreClickListener) :
             addressTextView.text = store.address
 
             val editTextView = rootView.findViewById<TextView>(R.id.store_list_edit_textView)
-            editTextView.visibility = View.VISIBLE
+            val deleteTextView =
+                rootView.findViewById<TextView>(R.id.store_list_delete_textView)
 
-            editTextView.setOnClickListener {
-                clickListener.onClick(store, CLICK_MENU_EDIT)
-            }
+            if (store.isLogin) {
+                editTextView.visibility = View.VISIBLE
 
-            val deleteTextView = rootView.findViewById<TextView>(R.id.store_list_delete_textView)
-            deleteTextView.visibility = View.VISIBLE
+                editTextView.setOnClickListener {
+                    clickListener.onClick(store, MainActivity.CLICK_MENU_EDIT)
+                }
 
-            deleteTextView.setOnClickListener {
-                clickListener.onClick(store, CLICK_MENU_DELETE)
+                deleteTextView.visibility = View.VISIBLE
+
+                deleteTextView.setOnClickListener {
+                    clickListener.onClick(store, MainActivity.CLICK_MENU_DELETE)
+                }
+            } else {
+                editTextView.visibility = View.INVISIBLE
+                deleteTextView.visibility = View.INVISIBLE
             }
 
             storeImageView.setOnClickListener {
@@ -69,12 +76,12 @@ class StoreAdapter(private val clickListener: OnStoreClickListener) :
     }
 }
 
-object StoreDiffUtil : DiffUtil.ItemCallback<Store>() {
-    override fun areItemsTheSame(oldItem: Store, newItem: Store) = oldItem.id == newItem.id
+object StoreDiffUtil : DiffUtil.ItemCallback<StoreListWithLogin>() {
+    override fun areItemsTheSame(oldItem: StoreListWithLogin, newItem: StoreListWithLogin) = oldItem.isLogin == newItem.isLogin
 
-    override fun areContentsTheSame(oldItem: Store, newItem: Store) = oldItem == newItem
+    override fun areContentsTheSame(oldItem: StoreListWithLogin, newItem: StoreListWithLogin) = oldItem == newItem
 }
 
-class OnStoreClickListener(val clickListener: (store: Store, mode: String) -> Unit) {
-    fun onClick(store: Store, mode: String) = clickListener(store, mode)
+class OnStoreClickListener(val clickListener: (store: StoreListWithLogin, mode: String) -> Unit) {
+    fun onClick(store: StoreListWithLogin, mode: String) = clickListener(store, mode)
 }

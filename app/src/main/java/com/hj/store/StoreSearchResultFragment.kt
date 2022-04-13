@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hj.store.adapter.OnStoreClickListener
 import com.hj.store.adapter.SearchResultAdapter
-import com.hj.store.data.Store
+import com.hj.store.data.StoreListWithLogin
 import com.hj.store.viewmodel.SearchViewModel
 
-class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
+class StoreSearchResultFragment(private val stores: List<StoreListWithLogin>) : Fragment() {
     private lateinit var rootView: View
     private lateinit var searchResultList: RecyclerView
     private lateinit var searchResultAdapter: SearchResultAdapter
@@ -23,7 +23,7 @@ class StoreSearchResultFragment(private val stores: List<Store>) : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
 
     companion object {
-        fun newInstance(stores: List<Store>) = StoreSearchResultFragment(stores)
+        fun newInstance(stores: List<StoreListWithLogin>) = StoreSearchResultFragment(stores)
     }
 
     override fun onCreateView(

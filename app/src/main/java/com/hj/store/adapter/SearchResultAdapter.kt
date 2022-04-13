@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hj.store.MainActivity.Companion.CLICK_STORE
 import com.hj.store.R
-import com.hj.store.data.Store
+import com.hj.store.data.StoreListWithLogin
 
 
 class SearchResultAdapter(private val clickListener: OnStoreClickListener) :
-    ListAdapter<Store, SearchResultAdapter.SearchResultViewHolder>(StoreDiffUtil) {
+    ListAdapter<StoreListWithLogin, SearchResultAdapter.SearchResultViewHolder>(StoreDiffUtil) {
+
     class SearchResultViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
-        fun bind(store: Store, clickListener: OnStoreClickListener) {
+        fun bind(store: StoreListWithLogin, clickListener: OnStoreClickListener) {
             val storeImageView = rootView.findViewById<ImageView>(R.id.store_list_imageView)
 
             Glide.with(rootView.context)

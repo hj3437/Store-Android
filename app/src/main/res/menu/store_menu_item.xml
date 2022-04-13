@@ -20,4 +20,7 @@
     <item
         android:id="@+id/app_bar_refresh"
         android:title="@string/refresh" />
+    <item
+        android:id="@+id/app_bar_new_store"
+        android:title="@string/store_new" />
 </menu>

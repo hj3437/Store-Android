@@ -14,6 +14,9 @@ class StoreEditViewModel : ViewModel() {
     private var _storeEdit = MutableLiveData<Boolean?>(false)
     val storeEdit: LiveData<Boolean?> = _storeEdit
 
+    private var _storeAdd = MutableLiveData<Boolean?>(false)
+    val storeAdd: LiveData<Boolean?> = _storeAdd
+
     fun editStore(id: Int, store: Store) {
         StoreApi.storeService.editStore(id, store).enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
@@ -28,7 +31,25 @@ class StoreEditViewModel : ViewModel() {
         })
     }
 
+    fun addStore(store: Store) {
+        StoreApi.storeService.addStore(store).enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    _storeAdd.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                Log.d("스토어 추가", "onFailure: $t")
+            }
+        })
+    }
+
     fun resetStoreEditState() {
         _storeEdit.value = null
+    }
+
+    fun resetStoreAddState() {
+        _storeAdd.value = null
     }
 }
