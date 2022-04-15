@@ -44,6 +44,7 @@
         android:clickable="true"
         android:focusable="true"
         android:tint="@color/white"
+        android:visibility="invisible"
         app:backgroundTint="@color/ic_launcher_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

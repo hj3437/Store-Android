@@ -32,6 +32,7 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
     private lateinit var rootView: View
     private lateinit var detailList: RecyclerView
     private lateinit var storeDetailAdapter: StoreDetailAdapter
+    private lateinit var addActionButton:FloatingActionButton
 
     private lateinit var storeDetailViewModel: StoreDetailViewModel
 
@@ -126,8 +127,9 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
             hasFixedSize()
         }
 
-        val addActionButton =
+        addActionButton =
             rootView.findViewById<FloatingActionButton>(R.id.store_detail_add_floatingActionButton)
+
         addActionButton.setOnClickListener {
             val intent = Intent(requireContext(), StoreDetailEditActivity::class.java)
             intent.putExtra(INTENT_STORE_MODE, CLICK_MENU_NEW)
@@ -179,6 +181,9 @@ class StoreDetailFragment(private val store: StoreListWithLogin) : Fragment() {
         var isLogin = false
         if (getLoginStatus() == 1) {
             isLogin = true
+            addActionButton.visibility = View.VISIBLE
+        }else{
+            addActionButton.visibility = View.INVISIBLE
         }
 
         return storeDetailItem.map { item ->
