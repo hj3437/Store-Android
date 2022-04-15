@@ -175,12 +175,16 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchStore(query)
+                if (query?.length!! >= 1) {
+                    searchStore(query)
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                searchStore(newText)
+                if (newText?.length!! >= 2) {
+                    searchStore(newText)
+                }
                 return true
             }
         })
