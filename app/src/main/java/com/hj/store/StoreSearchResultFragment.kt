@@ -1,10 +1,13 @@
 package com.hj.store
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -49,6 +52,8 @@ class StoreSearchResultFragment(private val stores: List<StoreListWithLogin>) : 
                 ?.replace(R.id.container, StoreDetailFragment.newInstance(store))
                 ?.addToBackStack(null)
                 ?.commit()
+
+            hideKeyboard()
         })
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
@@ -64,5 +69,11 @@ class StoreSearchResultFragment(private val stores: List<StoreListWithLogin>) : 
         closeButton.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
+    }
+
+    private fun hideKeyboard() {
+        val keyboard = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val container = rootView.findViewById<ConstraintLayout>(R.id.search_result_container)
+        keyboard.hideSoftInputFromWindow(container.windowToken, 0)
     }
 }
