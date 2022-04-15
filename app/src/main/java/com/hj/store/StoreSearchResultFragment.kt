@@ -42,13 +42,13 @@ class StoreSearchResultFragment(private val stores: List<StoreListWithLogin>) : 
 
         searchResultList = rootView.findViewById(R.id.search_result_list)
         searchResultAdapter = SearchResultAdapter(OnStoreClickListener { store, _ ->
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+
             activity?.supportFragmentManager
                 ?.beginTransaction()
                 ?.replace(R.id.container, StoreDetailFragment.newInstance(store))
                 ?.addToBackStack(null)
                 ?.commit()
-
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         })
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
